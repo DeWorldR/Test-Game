@@ -25,7 +25,7 @@ bulUfo_state = []
 num_of_ufo = 6
 UfoBoomIng = pygame.image.load('ufo_boom.png')
 for i in range(num_of_ufo):
-    ufoImg.appeng(pygame.image.load('ufo.png'))
+    ufoImg.append(pygame.image.load('ufo.png'))
     ufoX.append(random.randint(0, 740))
     ufoY.append(random.randint(0, 250))
     ufoX_change.append(random.randint(-1, 1))
@@ -78,7 +78,7 @@ scoreY = 15
 def show_score(x, y):
     scoreText = font0bj.render('Score: '+ str(score),True,'WHITE')
     screen.blit(scoreText, (x, y))
-bgSound = mixer.Sound('bg.wav')
+bgSound = mixer.Sound('bg.mp3')
 endState = "standby"
 def gameOver():
     global endState
@@ -89,7 +89,7 @@ endText = font0bj.render('Game Over', True,'WHITE')
 screen.blit(endText, (220, 230)) 
 global PlayerY
 PlayerY = -100
-bgSound = mixer.Sound('bg.wav')
+bgSound = mixer.Sound('bg.mp3')
 bgSound.play(-1)
 running = True
 while running:
@@ -110,7 +110,7 @@ while running:
     fly(playerX, playerY)
     if key[K_SPACE]:
         if bullet_state == "standby" and endState == "standby":
-            shootSound = mixer.Sound('shoot.wav')
+            shootSound = mixer.Sound('shoot.mp3')
             shootSound.play()
             bulletX = playerX
             bulletY = playerY
@@ -132,7 +132,7 @@ while running:
             ufoX[i] = random.randint(0, 740)
         ufo(ufoX[i], ufoY[i], i)
     if bulUfo_state[i] == "standby":
-        shootUfoSound = mixer.Sound('ufo_fire.wav')
+        shootUfoSound = mixer.Sound('shoot.mp3')
         shootSound.play()
         bulletX[i] = ufoX[i]
         bulletY[i] = ufoY[i]
@@ -148,7 +148,7 @@ while running:
     if collision:
         bullet_state = "standby"
         score +=10
-        ufoExplosion = mixer.Sound('explosion.wav')
+        ufoExplosion = mixer.Sound('explosion.mp3')
         ufoExplosion.play()
         UfoBoom(ufoX[i], ufoY[i])
         ufoY[i] = 700
