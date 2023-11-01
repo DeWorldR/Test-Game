@@ -23,7 +23,7 @@ bulUfoX = []
 bulUfoY = []
 bulUfo_state = []
 num_of_ufo = 6
-UfoBoomIng = pygame.image.load('ufo_boom.png')
+UfoBoomImg = pygame.image.load('ufo_boom.png')
 for i in range(num_of_ufo):
     ufoImg.append(pygame.image.load('ufo.png'))
     ufoX.append(random.randint(0, 740))
@@ -62,7 +62,7 @@ def collisionBulletUFO_player(x1, y1, x2, y2):
     else:
         return False
 def UfoClashplayer(x1, y1, x2, y2):
-    distace = math.sqrt(math.pow(x1-x2, 2)) + (math.pow(y1-y2,2))
+    distace = math.sqrt((math.pow(x1-x2, 2)) + (math.pow(y1-y2,2)))
     if distace < 40 :
         return True
     else:
@@ -71,6 +71,12 @@ def PlayerBoom(x, y):
     screen.blit(playerBoomimg, (x, y))
     pygame.display.update()
     pygame.time.delay(50)
+
+def UfoBoom(x, y):
+    screen.blit(UfoBoomImg, (x, y))
+    pygame.display.update()
+    pygame.time.delay(50)
+
 score = 0
 font0bj = pygame.font.Font('freesansbold.ttf', 30)
 scoreX = 15
@@ -78,7 +84,7 @@ scoreY = 15
 def show_score(x, y):
     scoreText = font0bj.render('Score: '+ str(score),True,'WHITE')
     screen.blit(scoreText, (x, y))
-bgSound = mixer.Sound('bg.mp3')
+#bgSound = mixer.Sound('bg.mp3')
 endState = "standby"
 def gameOver():
     global endState
@@ -89,8 +95,8 @@ endText = font0bj.render('Game Over', True,'WHITE')
 screen.blit(endText, (220, 230)) 
 global PlayerY
 PlayerY = -100
-bgSound = mixer.Sound('bg.mp3')
-bgSound.play(-1)
+#bgSound = mixer.Sound('bg.mp3')
+#bgSound.play(-1)
 running = True
 while running:
     for event in pygame.event.get():
@@ -98,10 +104,10 @@ while running:
             running =False
     screen.blit(bg, (0, 0))
     key = pygame.key.get_pressed()
-    if key[K_UP]: playerY -= playerY_change
-    if key[K_DOWN]: playerY += playerY_change
-    if key[K_LEFT]: playerX -= playerX_change
-    if key[K_RIGHT]: playerX += playerX_change
+    if key[K_w]: playerY -= playerY_change
+    if key[K_s]: playerY += playerY_change
+    if key[K_a]: playerX -= playerX_change
+    if key[K_d]: playerX += playerX_change
     if endState == "standby":
         if playerX < 0: playerX = 0
         if playerX >740: playerX = 740
@@ -110,8 +116,8 @@ while running:
     fly(playerX, playerY)
     if key[K_SPACE]:
         if bullet_state == "standby" and endState == "standby":
-            shootSound = mixer.Sound('shoot.mp3')
-            shootSound.play()
+            #shootSound = mixer.Sound('shoot.mp3')
+            #shootSound.play()
             bulletX = playerX
             bulletY = playerY
             fire(bulletX, bulletY)
@@ -131,40 +137,40 @@ while running:
             ufoY[i] = 0
             ufoX[i] = random.randint(0, 740)
         ufo(ufoX[i], ufoY[i], i)
-    if bulUfo_state[i] == "standby":
-        shootUfoSound = mixer.Sound('shoot.mp3')
-        shootSound.play()
-        bulletX[i] = ufoX[i]
-        bulletY[i] = ufoY[i]
-        ufo_fire(bulUfoX[i], bulUfoY[i])
-    if bulUfo_state[i] == "shoot":
-        bulUfoY[i] += bulUfoY_change
-        ufo_fire(bulUfoX[i], bulUfoY[i])
-    if bulUfoY[i] >= 600:
-        bulUfoY[i] = ufoY[i]
-        bulUfo_state[i] = "standby"
-    collision = collisionBulletPlayer_UFO(ufoX[i], ufoY[i], bulletX, bulletY)
-        
-    if collision:
-        bullet_state = "standby"
-        score +=10
-        ufoExplosion = mixer.Sound('explosion.mp3')
-        ufoExplosion.play()
-        UfoBoom(ufoX[i], ufoY[i])
-        ufoY[i] = 700
-        bulletY = -200
-    collisionPlayer = collisionBulletPlayer_UFO(playerX, playerY, bulUfoX[i], bulUfoY[i])
-    if collisionPlayer:
-        PlayerExplision = mixer.Sound('explosion.mp3')
-        PlayerExplision.play()
-        PlayerBoom(playerX, playerY)
-        gameOver()
-    ClashPlayer = UfoClashplayer(ufoX[i], ufoY[i], playerX,playerY)
-    if ClashPlayer:
-        clashUfo = mixer.Sound('explosion.mp3')
-        clashUfo.play()
-        PlayerBoom(playerX, playerY)
-        gameOver()
+        if bulUfo_state[i] == "standby":
+            #shootUfoSound = mixer.Sound('shoot.mp3')
+            #shootUfoSound.play()
+            bulUfoX[i] = ufoX[i]
+            bulUfoY[i] = ufoY[i]
+            ufo_fire(bulUfoX[i], bulUfoY[i])
+        if bulUfo_state[i] == "shoot":
+            bulUfoY[i] += bulUfoY_change
+            ufo_fire(bulUfoX[i], bulUfoY[i])
+        if bulUfoY[i] >= 600:
+            bulUfoY[i] = ufoY[i]
+            bulUfo_state[i] = "standby"
+        collision = collisionBulletPlayer_UFO(ufoX[i], ufoY[i], bulletX, bulletY)
+            
+        if collision:
+            bullet_state = "standby"
+            score +=10
+            #ufoExplosion = mixer.Sound('explosion.mp3')
+            #ufoExplosion.play()
+            UfoBoom(ufoX[i], ufoY[i])
+            ufoY[i] = 700
+            bulletY = -200
+        collisionPlayer = collisionBulletPlayer_UFO(playerX, playerY, bulUfoX[i], bulUfoY[i])
+        if collisionPlayer:
+            #PlayerExplision = mixer.Sound('explosion.mp3')
+            #PlayerExplision.play()
+            PlayerBoom(playerX, playerY)
+            gameOver()
+        ClashPlayer = UfoClashplayer(ufoX[i], ufoY[i], playerX,playerY)
+        if ClashPlayer:
+            #clashUfo = mixer.Sound('explosion.mp3')
+            #clashUfo.play()
+            PlayerBoom(playerX, playerY)
+            gameOver()
 if endState == "end":
     showEnd()
 show_score(scoreX, scoreY)
